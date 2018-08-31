@@ -2,6 +2,8 @@ package com.github.weaponman.benchmarkaccess;
 
 import android.support.v4.util.ArrayMap;
 
+import org.junit.runner.RunWith;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,17 +14,20 @@ import dk.ilios.spanner.Benchmark;
 import dk.ilios.spanner.BenchmarkConfiguration;
 import dk.ilios.spanner.Param;
 import dk.ilios.spanner.SpannerConfig;
+import dk.ilios.spanner.config.RuntimeInstrumentConfig;
+import dk.ilios.spanner.junit.SpannerRunner;
 
-public class ActivityBenchmarks {
+@RunWith(SpannerRunner.class)
+public class ActivityBenchmarksUnit {
 
-    private File filesDir = MyApplication.getContext().getFilesDir();
-    private File resultsDir = new File(filesDir, "results");
+    private File resultsDir = new File("/tmp", "results");
 
     @BenchmarkConfiguration
     public SpannerConfig configuration = new SpannerConfig.Builder()
-            .saveResults(resultsDir, ActivityBenchmarks.class.getCanonicalName() + ".json")
+            .saveResults(resultsDir, ActivityBenchmarksUnit.class.getCanonicalName() + ".json")
             .medianFailureLimit(.2f)
             .trialsPrExperiment(10)
+            .addInstrument(RuntimeInstrumentConfig.defaultConfig())
             .uploadResults()
             .build();
 
